@@ -1,9 +1,3 @@
-# Node Starter
+# Train Stats
 
-- **Package management:** [Yarn](https://yarnpkg.com/)
-- **Transpiling:** [Babel](https://babeljs.io/)
-- **Static code analysis:** [ESLint](https://eslint.org/)
-- **Formatting:** [Prettier](https://prettier.io/)
-- **Testing:** [Jasmine](https://jasmine.github.io/)
-- **Other Frameworks:**
-  - [Nodemon](http://nodemon.io/)
+Ad hoc project to pull statistical data about the Amtrak Downeaster train service. 
