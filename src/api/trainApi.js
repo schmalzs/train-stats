@@ -22,7 +22,7 @@ export const getAllTrains = (dates, trainNumbers, batchSize = 5) => {
     console.info(`Getting information for train #${trainNumber} on ${date}...`); // eslint-disable-line no-console
     const [year, month, day] = date.split('-');
     return getTrain(trainNumber, year, month, day)
-      .then(data => parseGetTrainResponse(data))
-      .catch(error => ({ error: error.message }));
+      .then(data => parseGetTrainResponse(date, trainNumber, data))
+      .catch(err => parseGetTrainResponse(date, trainNumber, err));
   });
 };

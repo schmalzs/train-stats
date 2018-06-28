@@ -1,3 +1,4 @@
+import isError from 'lodash/isError';
 import isNil from 'lodash/isNil';
 
 const STATION_KEYS = [
@@ -13,18 +14,26 @@ const STATION_KEYS = [
   'edep_otp'
 ];
 
-export const parseGetTrainResponse = res => {
-  const data = {};
+const isValidResponse = res => !isNil(res.number) && !isNil(res.stations);
 
-  data['train name'] = res.name;
-  data['train number'] = res.number;
-  res.stations.forEach(station => {
-    const stationName = station.name.split(',')[0];
-    STATION_KEYS.forEach(key => {
-      const value = station[key];
-      data[`${stationName} - ${key}`] = !isNil(value) ? value : '';
+export const parseGetTrainResponse = (date, trainNumber, res) => {
+  const data = { date, trainNumber };
+
+  if (isError(res)) {
+    data.error = res.message;
+  } else if (isValidResponse(res)) {
+    data.date = date;
+    data['train number'] = res.number || trainNumber;
+    res.stations.forEach(station => {
+      const stationName = station.name.split(',')[0];
+      STATION_KEYS.forEach(key => {
+        const value = station[key];
+        data[`${stationName} - ${key}`] = !isNil(value) ? value : '';
+      });
     });
-  });
+  } else {
+    data.error = 'No data';
+  }
 
   return data;
 };
