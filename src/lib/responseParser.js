@@ -13,7 +13,7 @@ const STATION_KEYS = [
   'edep_otp'
 ];
 
-export default res => {
+export const parseGetTrainResponse = res => {
   const data = {};
 
   data['train name'] = res.name;

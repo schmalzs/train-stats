@@ -2,15 +2,16 @@ import moment from 'moment';
 
 moment.locale('en');
 
-const TODAY = moment().startOf('day');
+const TODAY = moment().format('YYYY-MM-DD');
 
 const isWeekday = date => ![0, 6].includes(date.day());
 
-const getAllWeekdays = (startDate, endDate = TODAY) => {
+export const getWeekdays = (startDate, endDate = TODAY) => {
   const weekdays = [];
-  let currDate = startDate;
 
-  while (currDate.isSameOrBefore(endDate)) {
+  let currDate = moment(startDate);
+
+  while (currDate.isSameOrBefore(moment(endDate))) {
     if (isWeekday(currDate)) {
       weekdays.push(currDate.format('YYYY-MM-DD'));
     }
@@ -19,5 +20,3 @@ const getAllWeekdays = (startDate, endDate = TODAY) => {
 
   return weekdays;
 };
-
-export default startDate => getAllWeekdays(moment(startDate));

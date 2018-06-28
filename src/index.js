@@ -1,19 +1,21 @@
-import getWeekdays from './getWeekdays';
-import parseResponse from './parseResponse';
-import { getTrain } from './trainApi';
+import fs from 'fs';
+import jsonexport from 'jsonexport';
+import { getWeekdays } from './lib/dateUtils';
+import { getAllTrains } from './api/trainApi';
 
-const START_DATE = '2018-06-25';
-const TRAIN_NUMBERS = ['680', '685'];
+const START_DATE = '2018-06-18';
+const TRAIN_NUMBERS = ['680'];
+const BATCH_SIZE = 8;
+const OUTPUT_FILE = '/Users/sschmalz/Desktop/trainData.csv';
 
-const trainData = [];
+const weekdays = getWeekdays(START_DATE);
 
-getWeekdays(START_DATE).forEach(date => {
-  TRAIN_NUMBERS.forEach(trainNumber => {
-    const [year, month, day] = date.split('-');
-    getTrain(trainNumber, year, month, day)
-      .then(data => {
-        trainData.push(parseResponse(data));
-      })
-      .catch(err => trainData.push({ error: err.message }));
+getAllTrains(weekdays, TRAIN_NUMBERS, BATCH_SIZE).then(data => {
+  jsonexport(data, (exportError, csv) => {
+    if (exportError) throw exportError;
+    fs.writeFile(OUTPUT_FILE, csv, fileIoError => {
+      if (fileIoError) throw fileIoError;
+      console.log('file saved'); // eslint-disable-line no-console
+    });
   });
 });

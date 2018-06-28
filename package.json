@@ -9,11 +9,14 @@
     "build": "babel src -d dist",
     "lint": "eslint .",
     "serve": "node dist/index.js",
-    "start": "nodemon src/index.js --exec babel-node",
+    "start": "babel-node src/index.js",
+    "start:dev": "nodemon src/index.js --exec babel-node",
     "test": "babel-node spec/run.js",
     "test:watch": "nodemon --exec babel-node spec/run.js"
   },
   "dependencies": {
+    "batch-promises": "^0.0.3",
+    "jsonexport": "^2.2.0",
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
     "node-fetch": "^2.1.2"
@@ -21,6 +24,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.2.3",
+    "babel-plugin-syntax-async-functions": "^6.13.0",
     "babel-preset-env": "^1.7.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^16.1.0",
