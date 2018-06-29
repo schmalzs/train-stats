@@ -1,28 +1,34 @@
 import fetch from 'node-fetch';
+import isNil from 'lodash/isNil';
 import batchPromises from 'batch-promises';
-import { parseGetTrainResponse } from '../lib/responseParser';
 
 const URL = 'https://asm.transitdocs.com/api/trainDetail.php';
 
-export const getTrain = (train, year, month, day) => {
+const isValidResponse = data => !isNil(data.number) && !isNil(data.stations);
+
+export const getTrain = (train, date) => {
+  console.info(`Getting information for train #${train} on ${date}...`); // eslint-disable-line no-console
+  const [year, month, day] = date.split('-');
   const queryParams = Object.entries({ train, year, month, day })
     .map(([key, value]) => `${key}=${value}`)
     .join('&');
 
-  return fetch(`${URL}?${queryParams}`).then(res => res.json());
+  return fetch(`${URL}?${queryParams}`)
+    .then(res => res.json())
+    .then(data => {
+      if (!isValidResponse(data)) throw new Error('NO DATA');
+      return { train, date, ...data };
+    })
+    .catch(error => ({ train, date, error }));
 };
 
-export const getAllTrains = (dates, trainNumbers, batchSize = 5) => {
-  const dateTrainCombos = dates.reduce((combos, date) => {
-    trainNumbers.forEach(trainNumber => combos.push([date, trainNumber]));
-    return combos;
-  }, []);
+export const getAllTrains = (trains, dates, batchSize = 8) => {
+  const trainDateCombos = [];
+  trains.forEach(train =>
+    dates.forEach(date => trainDateCombos.push([train, date]))
+  );
 
-  return batchPromises(batchSize, dateTrainCombos, ([date, trainNumber]) => {
-    console.info(`Getting information for train #${trainNumber} on ${date}...`); // eslint-disable-line no-console
-    const [year, month, day] = date.split('-');
-    return getTrain(trainNumber, year, month, day)
-      .then(data => parseGetTrainResponse(date, trainNumber, data))
-      .catch(err => parseGetTrainResponse(date, trainNumber, err));
-  });
+  return batchPromises(batchSize, trainDateCombos, ([train, date]) =>
+    getTrain(train, date)
+  );
 };

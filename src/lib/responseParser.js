@@ -1,39 +1,32 @@
-import isError from 'lodash/isError';
 import isNil from 'lodash/isNil';
 
-const STATION_KEYS = [
-  'sch_arr',
-  'sch_dep',
-  'est_arr',
-  'est_dep',
-  'act_arr',
-  'act_dep',
-  'arr_otp',
-  'dep_otp',
-  'earr_otp',
-  'edep_otp'
-];
+const getArrival = station => {
+  if (!isNil(station.arr_otp)) return station.arr_otp;
+  if (!isNil(station.earr_otp)) return station.earr_otp;
+  return undefined;
+};
 
-const isValidResponse = res => !isNil(res.number) && !isNil(res.stations);
+const getDeparture = station => {
+  if (!isNil(station.dep_otp)) return station.dep_otp;
+  if (!isNil(station.edep_otp)) return station.edep_otp;
+  return undefined;
+};
 
-export const parseGetTrainResponse = (date, trainNumber, res) => {
-  const data = { date, trainNumber };
+export const parseTrain = trainData => {
+  if (trainData.error) return [trainData];
 
-  if (isError(res)) {
-    data.error = res.message;
-  } else if (isValidResponse(res)) {
-    data.date = date;
-    data['train number'] = res.number || trainNumber;
-    res.stations.forEach(station => {
-      const stationName = station.name.split(',')[0];
-      STATION_KEYS.forEach(key => {
-        const value = station[key];
-        data[`${stationName} - ${key}`] = !isNil(value) ? value : '';
-      });
-    });
-  } else {
-    data.error = 'No data';
-  }
+  const { date, train, stations } = trainData;
 
-  return data;
+  return stations
+    .map(stationData => {
+      const station = stationData.name.split(',')[0].toUpperCase();
+      const arrival = getArrival(stationData);
+      const departure = getDeparture(stationData);
+
+      if (!isNil(arrival) || !isNil(departure)) {
+        return { date, train, station, arrival, departure };
+      }
+      return undefined;
+    })
+    .filter(data => !isNil(data));
 };
