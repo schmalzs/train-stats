@@ -1163,6 +1163,10 @@ dot-prop@^4.1.0:
   dependencies:
     is-obj "^1.0.0"
 
+dotenv@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-6.0.0.tgz#24e37c041741c5f4b25324958ebbc34bca965935"
+
 duplexer3@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/duplexer3/-/duplexer3-0.1.4.tgz#ee01dd1cac0ed3cbc7fdbea37dc0a8f1ce002ce2"
@@ -1202,10 +1206,6 @@ es-to-primitive@^1.1.1:
     is-callable "^1.1.1"
     is-date-object "^1.0.1"
     is-symbol "^1.0.1"
-
-es6-promise-pool@^2.5.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/es6-promise-pool/-/es6-promise-pool-2.5.0.tgz#147c612b36b47f105027f9d2bf54a598a99d9ccb"
 
 escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.5:
   version "1.0.5"

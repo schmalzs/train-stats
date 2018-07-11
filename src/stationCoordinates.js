@@ -1,0 +1,38 @@
+export default {
+  PORTLAND: {
+    LATITUDE: '43.654369',
+    LONGITUDE: '-70.291226'
+  },
+  SACO: {
+    LATITUDE: '43.496348',
+    LONGITUDE: '-70.449238'
+  },
+  WELLS: {
+    LATITUDE: '43.320971',
+    LONGITUDE: '-70.612122'
+  },
+  DOVER: {
+    LATITUDE: '43.198341',
+    LONGITUDE: '-70.878229'
+  },
+  DURHAM: {
+    LATITUDE: '43.139564',
+    LONGITUDE: '-70.936109'
+  },
+  EXETER: {
+    LATITUDE: '42.981174',
+    LONGITUDE: '-70.957725'
+  },
+  HAVERHILL: {
+    LATITUDE: '42.773996',
+    LONGITUDE: '-71.086342'
+  },
+  WOBURN: {
+    LATITUDE: '42.517601',
+    LONGITUDE: '-71.144263'
+  },
+  BOSTON: {
+    LATITUDE: '42.366637',
+    LONGITUDE: '-71.062150'
+  }
+};
