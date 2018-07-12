@@ -21,5 +21,8 @@ export const getWeekdays = (startDate, endDate = TODAY) => {
   return weekdays;
 };
 
-export const getUnixTime = (date, format = 'M/D/YYYY h:mm a') =>
+export const toUnixTime = (date, format = 'M/D/YYYY h:mm a') =>
   moment(date, format).unix();
+
+export const fromUnixTime = (date, format = 'M/D/YYYY h:mm a') =>
+  moment(date, 'X').format(format);

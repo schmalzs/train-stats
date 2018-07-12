@@ -1,7 +1,7 @@
 const config = {
   batchSize: 32,
-  startDate: '2018-07-09', // earliest 2016-12-12
-  endDate: '2018-07-09',
+  startDate: '2017-12-22', // earliest 2016-12-12
+  endDate: '2017-12-25',
   trains: {
     '680': true,
     '681': false,

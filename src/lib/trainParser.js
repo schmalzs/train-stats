@@ -1,3 +1,4 @@
+import has from 'lodash/has';
 import isNil from 'lodash/isNil';
 import { getAllTrains } from '../api/trainApi';
 import config from '../config';
@@ -74,6 +75,7 @@ const parseTrain = (trainData, stationsFilter) => {
 export const collectTrainData = (trainNumbers, weekdays, stationsFilter) =>
   getAllTrains(trainNumbers, weekdays, config.batchSize).then(trainData =>
     trainData
+      .filter(data => !has(data, 'error'))
       .map(data => parseTrain(data, stationsFilter))
       .reduce((accumulator, stationData) => accumulator.concat(stationData), [])
   );

@@ -1,8 +1,24 @@
 import get from 'lodash/get';
+import has from 'lodash/has';
 import stationCoordinates from '../stationCoordinates';
 import { getAllWeather } from '../api/weatherApi';
-import { getUnixTime } from './dateUtils';
+import { toUnixTime } from './dateUtils';
 import config from '../config';
+
+const removeErrors = data => data.filter(entry => !has(entry, 'error'));
+
+const mergeWeatherData = (data, allWeatherData) =>
+  data.map(entry => {
+    const weatherEntry = allWeatherData.find(
+      weatherData =>
+        weatherData.time ===
+        toUnixTime(entry.arrivalTime || entry.departureTime)
+    );
+    return {
+      ...entry,
+      ...get(weatherEntry, 'currently', {})
+    };
+  });
 
 export const collectWeatherData = data => {
   const coordsAndTimes = data.map(entry => {
@@ -10,21 +26,11 @@ export const collectWeatherData = data => {
     return {
       latitude: LATITUDE,
       longitude: LONGITUDE,
-      time: getUnixTime(entry.arrivalTime || entry.departureTime)
+      time: toUnixTime(entry.arrivalTime || entry.departureTime)
     };
   });
 
-  return getAllWeather(coordsAndTimes, config.batchSize).then(allWeatherData =>
-    data.map(entry => {
-      const weatherEntry = allWeatherData.find(
-        weatherData =>
-          weatherData.time ===
-          getUnixTime(entry.arrivalTime || entry.departureTime)
-      );
-      return {
-        ...entry,
-        ...get(weatherEntry, 'currently', {})
-      };
-    })
-  );
+  return getAllWeather(coordsAndTimes, config.batchSize)
+    .then(removeErrors)
+    .then(weatherData => mergeWeatherData(data, weatherData));
 };

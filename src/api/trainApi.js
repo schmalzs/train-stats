@@ -19,7 +19,7 @@ export const getTrain = (train, date) => {
       if (!isValidResponse(data)) throw new Error('NO DATA');
       return { train, date, ...data };
     })
-    .catch(error => ({ train, date, error }));
+    .catch(error => ({ train, date, error: error.message }));
 };
 
 export const getAllTrains = (trains, dates, batchSize = 8) => {
