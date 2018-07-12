@@ -5,7 +5,7 @@ import { saveData } from './lib/dataSaver';
 import config, { getTrains, getStations } from './config';
 
 const trains = getTrains();
-const weekdays = getWeekdays(config.startDate, config.endDate);
+const weekdays = getWeekdays(config.startDate, config.endDate).reverse();
 const stations = getStations();
 
 collectTrainData(trains, weekdays, stations)
